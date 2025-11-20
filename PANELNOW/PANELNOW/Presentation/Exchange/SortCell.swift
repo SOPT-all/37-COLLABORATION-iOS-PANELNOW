@@ -7,10 +7,17 @@
 
 import UIKit
 
+
 import SnapKit
 import Then
 
+protocol SortCellDelegate: AnyObject {
+    func sortCellDidTapSort(_ cell: SortCell)
+}
+
 final class SortCell: UICollectionViewCell {
+
+    weak var delegate: SortCellDelegate?
 
     private let containerView = UIView().then {
         $0.backgroundColor = .white
@@ -42,6 +49,7 @@ final class SortCell: UICollectionViewCell {
         super.init(frame: frame)
         setUI()
         setLayout()
+        setAddTarget()
     }
 
     required init?(coder: NSCoder) {
@@ -65,5 +73,17 @@ final class SortCell: UICollectionViewCell {
             $0.height.equalTo(32)
             $0.width.equalTo(94)
         }
+    }
+    
+    private func setAddTarget() {
+        sortButton.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
+    }
+
+    func configure(option: SortOption) {
+        sortButton.setTitle(option.title, for: .normal)
+    }
+    
+    @objc private func didTapSortButton() {
+        delegate?.sortCellDidTapSort(self)
     }
 }

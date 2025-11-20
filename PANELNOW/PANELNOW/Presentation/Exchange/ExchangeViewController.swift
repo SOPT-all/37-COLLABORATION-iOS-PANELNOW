@@ -17,6 +17,20 @@ enum ExchangeSection: Int, CaseIterable {
     case items
 }
 
+enum SortOption {
+    case popular
+    case price
+
+    var title: String {
+        switch self {
+        case .popular:
+            return "인기순"
+        case .price:
+            return "가격순"
+        }
+    }
+}
+
 final class ExchangeViewController: UIViewController {
 
     private let lineSpacing: CGFloat = 24
@@ -45,6 +59,11 @@ final class ExchangeViewController: UIViewController {
     private var exchangedPoint: Int = 4000
     private var items: [ExchangeItemModel] = []
 
+    private var currentSort: SortOption = .popular
+
+    private var sortOverlayView: UIView?
+    private var sortOptionView: SortOptionView?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -65,7 +84,7 @@ final class ExchangeViewController: UIViewController {
         view.addSubview(collectionView)
 
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
 
@@ -160,6 +179,9 @@ extension ExchangeViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
 
+            cell.delegate = self
+            cell.configure(option: currentSort)
+
             return cell
 
         case .items:
@@ -225,6 +247,72 @@ extension ExchangeViewController: UICollectionViewDelegateFlowLayout {
         case .items:
             return collectViewInset
         }
+    }
+}
+
+extension ExchangeViewController: SortCellDelegate {
+
+    func sortCellDidTapSort(_ cell: SortCell) {
+        if sortOverlayView == nil {
+            showSortOptions(from: cell)
+        } else {
+            hideSortOptions()
+        }
+    }
+
+    private func showSortOptions(from cell: SortCell) {
+        // 1) overlay
+        let overlay = UIView()
+        overlay.backgroundColor = .clear
+        view.addSubview(overlay)
+        overlay.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapSortOverlay))
+        overlay.addGestureRecognizer(tap)
+
+        // 2) option view
+        let optionView = SortOptionView()
+        optionView.didSelect = { [weak self] option in
+            self?.applySort(option)
+            self?.hideSortOptions()
+        }
+
+        overlay.addSubview(optionView)
+
+        // 3) layout under the sort button
+        let buttonFrameInView = cell.sortButton.convert(cell.sortButton.bounds, to: view)
+
+        optionView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(buttonFrameInView.maxY + 8)
+            
+            $0.leading.equalToSuperview().offset(buttonFrameInView.minX)
+            
+            $0.width.equalTo(buttonFrameInView.width)
+            
+            $0.height.equalTo(58)
+        }
+
+        sortOverlayView = overlay
+        sortOptionView = optionView
+    }
+
+    @objc private func didTapSortOverlay() {
+        hideSortOptions()
+    }
+
+    private func hideSortOptions() {
+        sortOptionView?.removeFromSuperview()
+        sortOverlayView?.removeFromSuperview()
+        sortOptionView = nil
+        sortOverlayView = nil
+    }
+
+    private func applySort(_ option: SortOption) {
+        currentSort = option
+        // TODO: 정렬 로직 추가
+        let sortSection = ExchangeSection.sort.rawValue
+        let itemsSection = ExchangeSection.items.rawValue
+        collectionView.reloadSections(IndexSet([sortSection, itemsSection]))
     }
 }
 
