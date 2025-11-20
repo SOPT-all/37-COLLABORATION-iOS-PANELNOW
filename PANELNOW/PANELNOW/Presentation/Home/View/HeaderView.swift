@@ -12,6 +12,8 @@ import Then
 
 final class HeaderView: UIView {
     
+    // MARK: - UI Components
+    
     private let logoView = UIImageView().then {
         $0.image = .panelnowLogo
         $0.contentMode = .scaleAspectFit
