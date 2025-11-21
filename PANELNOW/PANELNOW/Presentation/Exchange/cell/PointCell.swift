@@ -53,6 +53,7 @@ final class PointCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
+        setStyle()
         setLayout()
     }
 
@@ -61,8 +62,6 @@ final class PointCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        contentView.backgroundColor = .gray04
-
         contentView.addSubview(pointIconImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(pointLabel)
@@ -70,6 +69,10 @@ final class PointCell: UICollectionViewCell {
         contentView.addSubview(exchangedTitleLabel)
         contentView.addSubview(exchangedPointLabel)
         contentView.addSubview(mainImageView)
+    }
+    
+    private func setStyle() {
+        contentView.backgroundColor = .gray04
     }
 
     private func setLayout() {

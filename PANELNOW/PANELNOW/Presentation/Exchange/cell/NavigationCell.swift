@@ -26,12 +26,10 @@ final class NavigationCell: UICollectionViewCell {
         $0.setImage(UIImage(named: "ic_info"), for: .normal)
     }
 
-    private var didTapBellHandler: (() -> Void)?
-    private var didTapProfileHandler: (() -> Void)?
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
+        setStyle()
         setLayout()
     }
 
@@ -40,13 +38,13 @@ final class NavigationCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        contentView.backgroundColor = .gray04
         contentView.addSubview(titleLabel)
         contentView.addSubview(alarmButton)
         contentView.addSubview(infoButton)
-
-        alarmButton.addTarget(self, action: #selector(didTapBell), for: .touchUpInside)
-        infoButton.addTarget(self, action: #selector(didTapProfile), for: .touchUpInside)
+    }
+    
+    private func setStyle() {
+        contentView.backgroundColor = .gray04
     }
 
     private func setLayout() {
@@ -66,18 +64,5 @@ final class NavigationCell: UICollectionViewCell {
             $0.centerY.equalTo(titleLabel)
             $0.width.height.equalTo(24)
         }
-    }
-
-    func configure(didTapBell: (() -> Void)?, didTapProfile: (() -> Void)?) {
-        self.didTapBellHandler = didTapBell
-        self.didTapProfileHandler = didTapProfile
-    }
-
-    @objc private func didTapBell() {
-        didTapBellHandler?()
-    }
-
-    @objc private func didTapProfile() {
-        didTapProfileHandler?()
     }
 }

@@ -24,7 +24,7 @@ final class SortCell: UICollectionViewCell {
     }
 
     let sortButton = UIButton(type: .system).then {
-        $0.setTitle("인기순", for: .normal)              // ⌄ 제거
+        $0.setTitle("인기순", for: .normal)
         $0.setTitleColor(.gray06, for: .normal)
         $0.titleLabel?.font = .title_m_14
         $0.layer.cornerRadius = 18
@@ -48,6 +48,7 @@ final class SortCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
+        setStyle()
         setLayout()
         setAddTarget()
     }
@@ -57,9 +58,12 @@ final class SortCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        contentView.backgroundColor = .white
         contentView.addSubview(containerView)
         containerView.addSubview(sortButton)
+    }
+    
+    private func setStyle() {
+        contentView.backgroundColor = .white
     }
 
     private func setLayout() {

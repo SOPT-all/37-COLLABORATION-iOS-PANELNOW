@@ -17,27 +17,24 @@ enum ExchangeSection: Int, CaseIterable {
     case items
 }
 
-enum SortOption {
-    case popular
-    case price
-
-    var title: String {
-        switch self {
-        case .popular:
-            return "인기순"
-        case .price:
-            return "가격순"
-        }
-    }
-}
-
 final class ExchangeViewController: UIViewController {
+    // MARK: - Properties
 
     private let lineSpacing: CGFloat = 24
     private let itemSpacing: CGFloat = 23
     private let cellHeight: CGFloat = 214
     private let collectViewInset: UIEdgeInsets = .init(top: 0, left: 20, bottom: 0, right: 20)
     
+    private var pointInfo = PointInfo(current: 4500, exchanged: 4000)
+    private var items: [ExchangeItemModel] = []
+
+    private var currentSort: SortOption = .popular
+
+    private var sortOverlayView: UIView?
+    private var sortOptionView: SortOptionView?
+
+    // MARK: - UI Components
+
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -54,15 +51,7 @@ final class ExchangeViewController: UIViewController {
         return collectionView
     }()
 
-    // 포인트, 상품 데이터
-    private var currentPoint: Int = 4500
-    private var exchangedPoint: Int = 4000
-    private var items: [ExchangeItemModel] = []
-
-    private var currentSort: SortOption = .popular
-
-    private var sortOverlayView: UIView?
-    private var sortOptionView: SortOptionView?
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,21 +59,27 @@ final class ExchangeViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
 
         setUI()
+        setStyle()
         setLayout()
         register()
         setDelegate()
         loadMockData()
     }
 
+    // MARK: - Setup
+
     private func setUI() {
+        view.addSubview(collectionView)
+    }
+    
+    private func setStyle() {
         view.backgroundColor = .gray04
     }
 
     private func setLayout() {
-        view.addSubview(collectionView)
-
         collectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
 
@@ -108,15 +103,9 @@ final class ExchangeViewController: UIViewController {
         items = ExchangeItemModel.mockData
         collectionView.reloadData()
     }
-
-    @objc private func didTapBell() {
-        // 알림 화면으로 이동
-    }
-
-    @objc private func didTapProfile() {
-        // 프로필 화면으로 이동
-    }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension ExchangeViewController: UICollectionViewDataSource {
 
@@ -154,11 +143,6 @@ extension ExchangeViewController: UICollectionViewDataSource {
             ) as? NavigationCell else {
                 return UICollectionViewCell()
             }
-            cell.configure(didTapBell: { [weak self] in
-                self?.didTapBell()
-            }, didTapProfile: { [weak self] in
-                self?.didTapProfile()
-            })
             return cell
 
         case .point:
@@ -168,7 +152,7 @@ extension ExchangeViewController: UICollectionViewDataSource {
             ) as? PointCell else {
                 return UICollectionViewCell()
             }
-            cell.configure(point: currentPoint, exchangedPoint: exchangedPoint)
+            cell.configure(point: pointInfo.current, exchangedPoint: pointInfo.exchanged)
             return cell
 
         case .sort:
@@ -178,10 +162,8 @@ extension ExchangeViewController: UICollectionViewDataSource {
             ) as? SortCell else {
                 return UICollectionViewCell()
             }
-
             cell.delegate = self
             cell.configure(option: currentSort)
-
             return cell
 
         case .items:
@@ -196,6 +178,8 @@ extension ExchangeViewController: UICollectionViewDataSource {
         }
     }
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension ExchangeViewController: UICollectionViewDelegateFlowLayout {
 
@@ -250,6 +234,8 @@ extension ExchangeViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - SortCellDelegate
+
 extension ExchangeViewController: SortCellDelegate {
 
     func sortCellDidTapSort(_ cell: SortCell) {
@@ -261,7 +247,6 @@ extension ExchangeViewController: SortCellDelegate {
     }
 
     private func showSortOptions(from cell: SortCell) {
-        // 1) overlay
         let overlay = UIView()
         overlay.backgroundColor = .clear
         view.addSubview(overlay)
@@ -270,7 +255,6 @@ extension ExchangeViewController: SortCellDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapSortOverlay))
         overlay.addGestureRecognizer(tap)
 
-        // 2) option view
         let optionView = SortOptionView()
         optionView.didSelect = { [weak self] option in
             self?.applySort(option)
@@ -279,7 +263,6 @@ extension ExchangeViewController: SortCellDelegate {
 
         overlay.addSubview(optionView)
 
-        // 3) layout under the sort button
         let buttonFrameInView = cell.sortButton.convert(cell.sortButton.bounds, to: view)
 
         optionView.snp.makeConstraints {
