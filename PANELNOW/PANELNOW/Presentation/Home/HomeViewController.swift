@@ -37,6 +37,7 @@ final class HomeViewController: UIViewController {
     private func setStyle() {
         view.backgroundColor = .gray04
         scrollView.showsVerticalScrollIndicator = false
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     private func setUI() {
@@ -52,14 +53,12 @@ final class HomeViewController: UIViewController {
     
     private func setLayout() {
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalTo(scrollView)
-            $0.height.greaterThanOrEqualToSuperview().priority(.low)
         }
         
         headerView.snp.makeConstraints {
