@@ -50,8 +50,8 @@ class ItemNameAndPointCell: BaseUITableViewCell {
         $0.textColor = .gray01
     }
     
-    private let phoneNumberLabel = UILabel().then {
-        $0.text = "010-1234-5678"
+    private lazy var phoneNumberLabel = UILabel().then {
+        $0.text = maskPhoneNumber("01012345678")
         $0.font = .body_r_16
         $0.textColor = .gray06
     }
@@ -118,5 +118,13 @@ class ItemNameAndPointCell: BaseUITableViewCell {
             $0.height.equalTo(112)
             $0.bottom.equalToSuperview().inset(26)
         }
+    }
+    
+    private func maskPhoneNumber(_ phoneNumber: String) -> String {
+        let digits = phoneNumber.filter { $0.isNumber }
+        guard digits.count >= 6 else { return phoneNumber }
+        
+        let prefix = digits.prefix(digits.count - 6)
+        return prefix + "******"
     }
 }
