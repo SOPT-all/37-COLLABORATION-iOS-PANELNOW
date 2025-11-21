@@ -98,6 +98,7 @@ final class PopularSurveyView: UIView {
             $0.top.equalTo(contentLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
+            $0.height.equalTo(232)
         }
     }
 }

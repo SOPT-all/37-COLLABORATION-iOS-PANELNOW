@@ -56,7 +56,7 @@ final class HeaderView: UIView {
     private func setLayout() {
         logoView.snp.makeConstraints{
             $0.leading.equalToSuperview().inset(16)
-            $0.top.equalToSuperview()
+            $0.verticalEdges.equalToSuperview()
         }
         
         alarmButton.snp.makeConstraints{
