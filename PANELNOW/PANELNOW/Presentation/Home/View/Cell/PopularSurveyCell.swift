@@ -32,17 +32,7 @@ class PopularSurveyCell: UICollectionViewCell {
         $0.textColor = .gray01
     }
     
-    private let pointBadgeView = UIView().then {
-        $0.backgroundColor = .subBlue
-        $0.layer.cornerRadius = 12
-    }
-    
-    private let pointLabel = UILabel().then {
-        $0.text = "100P"
-        $0.font = .title_m_12
-        $0.textColor = .mainBlue
-        $0.textAlignment = .center
-    }
+    private let pointBadge = PointBadge()
     
     // MARK: - Life Cycle
     
@@ -61,8 +51,7 @@ class PopularSurveyCell: UICollectionViewCell {
     
     private func setUI() {
         addSubviews(iconImageView, titleLabel,
-                    timeLabel,pointBadgeView)
-        pointBadgeView.addSubview(pointLabel)
+                    timeLabel,pointBadge)
     }
     
     private func setLayout() {
@@ -82,15 +71,9 @@ class PopularSurveyCell: UICollectionViewCell {
             $0.leading.equalTo(titleLabel)
         }
         
-        pointBadgeView.snp.makeConstraints{
+        pointBadge.snp.makeConstraints{
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.width.equalTo(48)
-            $0.height.equalTo(25)
-        }
-        
-        pointLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
         }
     }
     
@@ -98,6 +81,6 @@ class PopularSurveyCell: UICollectionViewCell {
         iconImageView.image = image
         titleLabel.text = title
         timeLabel.text = time
-        pointLabel.text = point
+        pointBadge.setText(point)
     }
 }
