@@ -28,6 +28,7 @@ final class MyPointView: UIView {
     private let pointView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
     }
     
     private let pointImage = UIImageView().then {
