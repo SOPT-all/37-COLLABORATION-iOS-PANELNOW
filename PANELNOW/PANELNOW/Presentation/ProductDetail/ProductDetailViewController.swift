@@ -67,7 +67,14 @@ extension ProductDetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        8
+        guard let section = CellSection(rawValue: section) else { return 0 }
+        
+        switch section {
+        case .itemImage, .itemNameAndPoint, .itemDetail:
+            return 8
+        case .information:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
