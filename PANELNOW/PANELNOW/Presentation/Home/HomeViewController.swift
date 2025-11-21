@@ -30,6 +30,7 @@ final class HomeViewController: UIViewController {
         setStyle()
         setUI()
         setLayout()
+        setDelegate()
     }
     
     // MARK: - Setting Methods
@@ -81,6 +82,16 @@ final class HomeViewController: UIViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(43)
         }
+    }
+    
+    private func setDelegate() {
+        myPointView.delegate = self
+    }
+}
+
+extension HomeViewController: MyPointViewDelegate {
+    func didTapExchangeButton() {
+        // TODO: ExchangeViewController 네비게이션 구현
     }
 }
 

@@ -10,7 +10,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol MyPointViewDelegate: AnyObject {
+    func didTapExchangeButton()
+}
+
 final class MyPointView: UIView {
+    
+    // MARK: - Properties
+    
+    weak var delegate: MyPointViewDelegate?
     
     // MARK: - UI Components
     
@@ -66,6 +74,7 @@ final class MyPointView: UIView {
         setStyle()
         setUI()
         setLayout()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -131,6 +140,15 @@ final class MyPointView: UIView {
             $0.bottom.equalToSuperview().inset(24)
             $0.trailing.equalToSuperview().inset(16)
         }
+    }
+    
+    private func setAddTarget() {
+        exchangeButton.addTarget(self, action: #selector(exchangeButtonDidTap), for: .touchUpInside)
+    }
+        
+    @objc
+    private func exchangeButtonDidTap() {
+        delegate?.didTapExchangeButton()
     }
 }
 
