@@ -49,7 +49,7 @@ final class ExchangeCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         setUI()
-        setHierarchy()
+        setStyle()
         setLayout()
     }
     
@@ -60,16 +60,16 @@ final class ExchangeCollectionViewCell: UICollectionViewCell {
     // MARK: - UI
     
     private func setUI() {
-        contentView.backgroundColor = .white
-    }
-    
-    private func setHierarchy() {
         contentView.addSubviews(
             thumbnailImageView,
             titleLabel,
             dayLabel,
             pointLabel
         )
+    }
+    
+    private func setStyle() {
+        contentView.backgroundColor = .white
     }
     
     private func setLayout() {

@@ -38,9 +38,7 @@ final class NavigationCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(alarmButton)
-        contentView.addSubview(infoButton)
+        contentView.addSubviews(titleLabel, alarmButton, infoButton)
     }
     
     private func setStyle() {

@@ -33,79 +33,79 @@ struct ExchangeItemModel {
 
     static let mockData: [ExchangeItemModel] = [
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img1") ?? UIImage(),
+            image: .exchangeImg1,
             title: "현금 교환",
             businessDays: 10,
             point: 2000
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img2") ?? UIImage(),
+            image: .exchangeImg2,
             title: "굿네이버스 기부",
             businessDays: 30,
             point: 100
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img3") ?? UIImage(),
+            image: .exchangeImg3,
             title: "네이버페이 포인트쿠폰 3천원권",
             businessDays: 3,
             point: 3000
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img4") ?? UIImage(),
+            image: .exchangeImg4,
             title: "배스킨라빈스 파인트 아이스크림",
             businessDays: 3,
             point: 9800
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img5") ?? UIImage(),
+            image: .exchangeImg5,
             title: "교촌 허니오리지날+콜라 1.25L",
             businessDays: 3,
             point: 22000
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img6") ?? UIImage(),
+            image: .exchangeImg6,
             title: "네이버페이 포인트쿠폰 5천원권",
             businessDays: 3,
             point: 5000
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img7") ?? UIImage(),
+            image: .exchangeImg7,
             title: "이디야커피 (L)ICED 아메리카노",
             businessDays: 3,
             point: 3200
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img8") ?? UIImage(),
+            image: .exchangeImg8,
             title: "GS25 빙그레 바나나우유 240ML",
             businessDays: 3,
             point: 1800
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img9") ?? UIImage(),
+            image: .exchangeImg9,
             title: "GS25 오리온 포카칩 오리지널",
             businessDays: 3,
             point: 1700
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img10") ?? UIImage(),
+            image: .exchangeImg10,
             title: "GS25 삼양 불닭볶음면 (대컵)",
             businessDays: 3,
             point: 1800
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img11") ?? UIImage(),
+            image: .exchangeImg11,
             title: "컬쳐랜드 상품권 3천원권",
             businessDays: 3,
             point: 2000
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img12") ?? UIImage(),
+            image: .exchangeImg12,
             title: "GS25 코카콜라 슬림캔 250ML",
             businessDays: 3,
             point: 1700
         ),
         ExchangeItemModel(
-            image: UIImage(named: "exchange_img13") ?? UIImage(),
+            image: .exchangeImg13,
             title: "컬쳐랜드 상품권 5천원권",
             businessDays: 3,
             point: 5000

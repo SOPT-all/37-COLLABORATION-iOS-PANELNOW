@@ -13,7 +13,7 @@ import Then
 final class PointCell: UICollectionViewCell {
 
     private let pointIconImageView = UIImageView().then {
-        $0.image = UIImage(named: "ic_myPoint")
+        //TODO: $0.image = .icMyPoint
         $0.contentMode = .scaleAspectFit
     }
 
@@ -62,13 +62,7 @@ final class PointCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        contentView.addSubview(pointIconImageView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(pointLabel)
-        contentView.addSubview(arrowImageView)
-        contentView.addSubview(exchangedTitleLabel)
-        contentView.addSubview(exchangedPointLabel)
-        contentView.addSubview(mainImageView)
+        contentView.addSubviews(pointIconImageView, titleLabel, pointLabel, arrowImageView, exchangedTitleLabel, exchangedPointLabel, mainImageView)
     }
     
     private func setStyle() {
@@ -76,7 +70,6 @@ final class PointCell: UICollectionViewCell {
     }
 
     private func setLayout() {
-        
         pointIconImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
             $0.leading.equalToSuperview().inset(16)

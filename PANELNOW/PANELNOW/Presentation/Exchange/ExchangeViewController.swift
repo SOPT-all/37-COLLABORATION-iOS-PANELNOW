@@ -56,8 +56,6 @@ final class ExchangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.setNavigationBarHidden(true, animated: false)
-
         setUI()
         setStyle()
         setLayout()
@@ -74,11 +72,14 @@ final class ExchangeViewController: UIViewController {
     
     private func setStyle() {
         view.backgroundColor = .gray04
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInsetAdjustmentBehavior = .never
     }
 
     private func setLayout() {
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalToSuperview()
             $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
@@ -197,7 +198,7 @@ extension ExchangeViewController: UICollectionViewDelegateFlowLayout {
 
         switch sectionType {
         case .navigation:
-            return CGSize(width: fullWidth, height: 60)
+            return CGSize(width: fullWidth, height: 60 + 40 )
 
         case .point:
             return CGSize(width: fullWidth, height: 160)

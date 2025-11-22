@@ -35,20 +35,33 @@ final class SortOptionView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        setUI()
+        setStyle()
+        setLayout()
+        setAddTarget()
+    }
+
+    private func setUI() {
+        addSubview(stackView)
+        stackView.addArrangedSubview(priceButton)
+        stackView.addArrangedSubview(popularButton)
+    }
+    
+    private func setStyle() {
         backgroundColor = .white
         layer.cornerRadius = 18
         layer.borderWidth = 1
         layer.borderColor = UIColor.gray01.cgColor
         clipsToBounds = true
+    }
 
-        addSubview(stackView)
+    private func setLayout() {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
 
-        stackView.addArrangedSubview(priceButton)
-        stackView.addArrangedSubview(popularButton)
-
+    private func setAddTarget() {
         priceButton.addTarget(self, action: #selector(didTapPrice), for: .touchUpInside)
         popularButton.addTarget(self, action: #selector(didTapPopular), for: .touchUpInside)
     }
