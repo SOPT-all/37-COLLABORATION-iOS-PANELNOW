@@ -14,7 +14,7 @@ class ProductDetailView: UIView {
     
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
         tableView.sectionHeaderTopPadding = 0
         tableView.bounces = false
         return tableView
@@ -44,6 +44,7 @@ class ProductDetailView: UIView {
     
     private func setStyle() {
         backgroundColor = .white
+        tableView.showsVerticalScrollIndicator = false
     }
     
     private func setUI() {

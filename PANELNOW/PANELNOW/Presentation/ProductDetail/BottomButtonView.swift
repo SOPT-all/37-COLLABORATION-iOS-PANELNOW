@@ -64,6 +64,9 @@ final class BottomButtonView: UIView {
         $0.titleLabel?.font = .body_r_16
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         $0.layer.cornerRadius = 20
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.1
+        $0.layer.shadowOffset = CGSize(width: 0, height: -4)
         $0.backgroundColor = .mainBlue
     }
     

@@ -44,6 +44,7 @@ class ItemNameAndPointCell: BaseUITableViewCell {
         $0.spacing = 4
     }
     
+    // TODO: 받으실 곳 옆에 아이콘 추가하기
     private let receivePlaceLabel = UILabel().then {
         $0.text = "받으실 곳"
         $0.font = .title_m_14
@@ -82,18 +83,13 @@ class ItemNameAndPointCell: BaseUITableViewCell {
     }
     
     override func setUI() {
-        placeInfoStackView.addArrangedSubview(receivePlaceLabel)
-        placeInfoStackView.addArrangedSubview(phoneNumberLabel)
+        placeInfoStackView.addArrangedSubviews(receivePlaceLabel, phoneNumberLabel)
         
-        dateInfoStackView.addArrangedSubview(expectedDateLabel)
-        dateInfoStackView.addArrangedSubview(dateLabel)
+        dateInfoStackView.addArrangedSubviews(expectedDateLabel, dateLabel)
         
-        containerStackView.addArrangedSubview(placeInfoStackView)
-        containerStackView.addArrangedSubview(dateInfoStackView)
+        containerStackView.addArrangedSubviews(placeInfoStackView, dateInfoStackView)
         
-        [itemNameLabel, informationLabel, point, containerStackView].forEach {
-            contentView.addSubview($0)
-        }
+        contentView.addSubviews(itemNameLabel, informationLabel, point, containerStackView)
     }
     
     override func setLayout() {
