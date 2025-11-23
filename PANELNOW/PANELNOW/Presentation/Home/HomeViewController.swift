@@ -12,6 +12,10 @@ import Then
 
 final class HomeViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    var onExchangeButtonTap: (() -> Void)?
+    
     // MARK: - UI Components
     
     private let scrollView = UIScrollView()
@@ -38,6 +42,7 @@ final class HomeViewController: UIViewController {
     private func setStyle() {
         view.backgroundColor = .gray04
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
         self.navigationController?.isNavigationBarHidden = true
     }
     
@@ -63,7 +68,7 @@ final class HomeViewController: UIViewController {
         }
         
         headerView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(56)
             $0.horizontalEdges.equalToSuperview()
         }
         
@@ -80,7 +85,7 @@ final class HomeViewController: UIViewController {
         miniTestView.snp.makeConstraints {
             $0.top.equalTo(popularSurveyView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(43)
+            $0.bottom.equalToSuperview().inset(130)
         }
     }
     
@@ -91,7 +96,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController: MyPointViewDelegate {
     func didTapExchangeButton() {
-        // TODO: ExchangeViewController 네비게이션 구현
+        onExchangeButtonTap?()
     }
 }
 
