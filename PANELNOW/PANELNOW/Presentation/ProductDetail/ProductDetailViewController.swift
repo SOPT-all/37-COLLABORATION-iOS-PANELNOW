@@ -28,8 +28,13 @@ class ProductDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setStyle()
         register()
         setDelegate()
+    }
+    
+    private func setStyle() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func register() {

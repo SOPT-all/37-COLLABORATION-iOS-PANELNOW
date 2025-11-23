@@ -43,8 +43,7 @@ final class SortOptionView: UIView {
 
     private func setUI() {
         addSubview(stackView)
-        stackView.addArrangedSubview(priceButton)
-        stackView.addArrangedSubview(popularButton)
+        stackView.addArrangedSubviews(priceButton,popularButton)
     }
     
     private func setStyle() {

@@ -18,6 +18,7 @@ enum ExchangeSection: Int, CaseIterable {
 }
 
 final class ExchangeViewController: UIViewController {
+    
     // MARK: - Properties
 
     private let lineSpacing: CGFloat = 24
