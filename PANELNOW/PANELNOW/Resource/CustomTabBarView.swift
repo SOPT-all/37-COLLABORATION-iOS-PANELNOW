@@ -19,25 +19,38 @@ final class CustomTabBarView: UIView {
     }
     
     private let homeButton = UIButton().then {
-        $0.setImage(.icHome, for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.image = .icHome
+        config.contentInsets = .zero
+        config.imagePadding = 0
+        $0.configuration = config
+        
+        $0.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.baseForegroundColor = .clear
+            updated?.image = .icHome
+            config.contentInsets = .zero
+            config.imagePadding = 0
+            button.configuration = updated
+        }
     }
     
-    private lazy var surveyButton = makeTabBarItem(imageName: .icSurvey, title: "설문조사")
-    private lazy var eventButton = makeTabBarItem(imageName: .icEvent, title: "이벤트")
-    private lazy var exchangePointButton = makeTabBarItem(imageName: .icExchange, title: "포인트 교환")
-    private lazy var myActivityButton = makeTabBarItem(imageName: .icActivity, title: "내 활동")
+    private lazy var surveyButton = makeTabBarItem(imageName: .icSurvey, selectedImageName: .icSurvey, title: "설문조사")
+    private lazy var eventButton = makeTabBarItem(imageName: .icEvent, selectedImageName: .icEvent, title: "이벤트")
+    private lazy var exchangePointButton = makeTabBarItem(imageName: .icExchange, selectedImageName: .icExchangeFill, title: "포인트 교환")
+    private lazy var myActivityButton = makeTabBarItem(imageName: .icActivity, selectedImageName: .icActivity, title: "내 활동")
     
     var exchangePointButtonTapHandler: (() -> Void)?
     var homeButtonTapHandler: (() -> Void)?
     
     private let leftStackView = UIStackView().then {
         $0.axis = .horizontal
-        $0.spacing = 20
+        $0.spacing = 14
     }
     
     private let rightStackView = UIStackView().then {
         $0.axis = .horizontal
-        $0.spacing = 18
+        $0.spacing = 2
     }
     
     override init(frame: CGRect) {
@@ -97,32 +110,39 @@ final class CustomTabBarView: UIView {
     
     @objc
     private func didTapExchangePoint() {
+        exchangePointButton.isSelected = true
         exchangePointButtonTapHandler?()
     }
     
     @objc
     private func didTapHome() {
+        exchangePointButton.isSelected = false
         homeButtonTapHandler?()
     }
     
-    private func makeTabBarItem(imageName: UIImage?, title: String) -> UIButton {
+    private func makeTabBarItem(imageName: UIImage?, selectedImageName: UIImage?, title: String) -> UIButton {
         
         var config = UIButton.Configuration.plain()
-        config.image = imageName
-        config.title = title
-        config.baseForegroundColor = .gray02
         config.imagePlacement = .top
         config.imagePadding = 6
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)
+        config.background.backgroundColor = .clear
         
         var attributes = AttributeContainer()
         attributes.font = .body_r_14
         attributes.foregroundColor = .gray02
-        
-        config.attributedTitle = AttributedString(title, attributes: attributes)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)
-        
+   
         let button = UIButton(type: .custom)
         button.configuration = config
+        
+        button.setImage(imageName, for: .normal)
+        button.setImage(selectedImageName, for: .selected)
+        
+        button.setTitle(title, for: .normal)
+        button.setTitle(title, for: .selected)
+        button.titleLabel?.font = .body_r_14
+        button.setTitleColor(.gray02, for: .normal)
+        button.setTitleColor(.mainBlue, for: .selected)
         
         return button
     }

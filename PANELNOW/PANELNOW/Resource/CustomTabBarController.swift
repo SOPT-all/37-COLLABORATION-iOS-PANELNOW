@@ -15,19 +15,13 @@ class CustomTabBarController: UIViewController {
     private let customTabBar = CustomTabBarView()
     private let contentContainerView = UIView()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setStyle()
+
         setUI()
         setLayout()
         bindTabBarButtonAction()
         showHome()
-    }
-    
-    private func setStyle() {
-        
     }
     
     private func setUI() {
@@ -65,8 +59,8 @@ class CustomTabBarController: UIViewController {
     
     private func showExchangePoint() {
         // TODO: 이곳에 교환 화면 추가
-        let vc = ViewController()
-        setContentView(vc)
+//        let vc = ExchangeViewController()
+//        setContentView(vc)
     }
     
     private func setContentView(_ vc: UIViewController) {
