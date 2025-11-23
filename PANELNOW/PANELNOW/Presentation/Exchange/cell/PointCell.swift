@@ -13,7 +13,7 @@ import Then
 final class PointCell: UICollectionViewCell {
 
     private let pointIconImageView = UIImageView().then {
-        //TODO: $0.image = .icMyPoint
+        $0.image = .icMyPoint
         $0.contentMode = .scaleAspectFit
     }
 
@@ -29,7 +29,7 @@ final class PointCell: UICollectionViewCell {
     }
 
     private let arrowImageView = UIImageView().then {
-        $0.image = UIImage(systemName: "chevron.right")
+        $0.image = .icRightArrow
         $0.tintColor = .gray02
         $0.contentMode = .scaleAspectFit
     }
@@ -73,7 +73,7 @@ final class PointCell: UICollectionViewCell {
         pointIconImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
             $0.leading.equalToSuperview().inset(16)
-            $0.width.height.equalTo(24)
+            $0.size.equalTo(24)
         }
 
         titleLabel.snp.makeConstraints {
@@ -89,7 +89,7 @@ final class PointCell: UICollectionViewCell {
         arrowImageView.snp.makeConstraints {
             $0.centerY.equalTo(pointLabel)
             $0.leading.equalTo(pointLabel.snp.trailing).offset(10)
-            $0.width.height.equalTo(24)
+            $0.size.equalTo(24)
         }
 
         exchangedTitleLabel.snp.makeConstraints {

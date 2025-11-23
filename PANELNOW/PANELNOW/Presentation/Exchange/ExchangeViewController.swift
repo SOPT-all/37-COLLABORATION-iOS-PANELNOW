@@ -231,7 +231,12 @@ extension ExchangeViewController: UICollectionViewDelegateFlowLayout {
             return UIEdgeInsets(top: 16, left: 16, bottom: 24, right: 16)
 
         case .items:
-            return collectViewInset
+            return UIEdgeInsets(
+                top: collectViewInset.top,
+                left: collectViewInset.left,
+                bottom: 120,
+                right: collectViewInset.right
+            )
         }
     }
 }
@@ -298,6 +303,28 @@ extension ExchangeViewController: SortCellDelegate {
         let sortSection = ExchangeSection.sort.rawValue
         let itemsSection = ExchangeSection.items.rawValue
         collectionView.reloadSections(IndexSet([sortSection, itemsSection]))
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension ExchangeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let sectionType = ExchangeSection(rawValue: indexPath.section) else { return }
+        
+        switch sectionType {
+        case .items:
+            let detailVC = ProductDetailViewController()
+            
+            // TODO: 데이터전달
+            
+            detailVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(detailVC, animated: true)
+            
+        default:
+            break
+        }
     }
 }
 
