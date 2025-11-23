@@ -47,6 +47,7 @@ class ProductDetailViewController: UIViewController {
     private func setDelegate() {
         mainTableView.tableView.delegate = self
         mainTableView.tableView.dataSource = self
+        mainTableView.delegate = self
     }
 }
 
@@ -114,5 +115,11 @@ extension ProductDetailViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: InformationCell.identifier, for: indexPath) as? InformationCell else { return UITableViewCell() }
             return cell
         }
+    }
+}
+
+extension ProductDetailViewController: ProductDetailViewDelegate {
+    func didTapBackButton() {
+        self.navigationController?.popViewController(animated: true)
     }
 }

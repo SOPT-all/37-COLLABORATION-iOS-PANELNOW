@@ -41,14 +41,19 @@ class ItemNameAndPointCell: BaseUITableViewCell {
     
     private let placeInfoStackView = UIStackView().then {
         $0.axis = .horizontal
-        $0.spacing = 4
+        $0.spacing = 8
     }
     
-    // TODO: 받으실 곳 옆에 아이콘 추가하기
     private let receivePlaceLabel = UILabel().then {
         $0.text = "받으실 곳"
         $0.font = .title_m_14
         $0.textColor = .gray01
+    }
+    
+    private let arrowImageView = UIImageView().then {
+        $0.image = .icRightArrow2
+        $0.tintColor = .gray02
+        $0.contentMode = .scaleAspectFit
     }
     
     private lazy var phoneNumberLabel = UILabel().then {
@@ -83,7 +88,7 @@ class ItemNameAndPointCell: BaseUITableViewCell {
     }
     
     override func setUI() {
-        placeInfoStackView.addArrangedSubviews(receivePlaceLabel, phoneNumberLabel)
+        placeInfoStackView.addArrangedSubviews(receivePlaceLabel, phoneNumberLabel, arrowImageView)
         
         dateInfoStackView.addArrangedSubviews(expectedDateLabel, dateLabel)
         
