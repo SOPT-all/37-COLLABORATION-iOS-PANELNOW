@@ -8,15 +8,15 @@
 import Foundation
 
 enum HeaderType {
-    case auth
+    case auth(productId: Int)
     case none
     
     var type: [String: String] {
         switch self {
-        case .auth:
+        case .auth(let productId):
             [
                 "Content-Type": "application/json",
-                "product-id": "1"
+                "product-id": "\(productId)" // TODO: \(productId)으로 수정
             ]
         case .none:
             ["Content-Type": "application/json"]

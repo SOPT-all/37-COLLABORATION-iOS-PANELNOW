@@ -26,9 +26,10 @@ enum EndPoint {
     var header: [String: String] {
         switch self {
         case .fetchHome, .fetchExchange:
-            HeaderType.none.type
-        case .fetchProductDetail:
-            HeaderType.auth.type
+            return HeaderType.none.type
+            
+        case .fetchProductDetail(let productId):
+            return HeaderType.auth(productId: productId).type
         }
     }
 }
