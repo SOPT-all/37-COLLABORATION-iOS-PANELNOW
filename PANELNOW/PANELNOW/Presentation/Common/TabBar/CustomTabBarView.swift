@@ -68,7 +68,6 @@ final class CustomTabBarView: UIView {
     
     private func setStyle() {
         self.backgroundColor = .clear
-        self.insetsLayoutMarginsFromSafeArea = false
     }
     
     private func setUI() {
@@ -145,6 +144,11 @@ final class CustomTabBarView: UIView {
         button.setTitleColor(.mainBlue, for: .selected)
         
         return button
+    }
+    
+    func updateButtonStateToExchange() {
+        homeButton.isSelected = false
+        exchangePointButton.isSelected = true
     }
 }
 
