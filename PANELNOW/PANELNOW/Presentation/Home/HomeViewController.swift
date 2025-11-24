@@ -35,6 +35,7 @@ final class HomeViewController: UIViewController {
         setUI()
         setLayout()
         setDelegate()
+        fetchData()
     }
     
     // MARK: - Setting Methods
@@ -91,6 +92,25 @@ final class HomeViewController: UIViewController {
     
     private func setDelegate() {
         myPointView.delegate = self
+    }
+    
+    private func fetchData() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let pointData = try await HomeService.shared.fetchHome()
+                self.updateUI(with: pointData)
+                
+            } catch {
+                print("홈 유저 포인트 불러오기 실패: \(error)")
+            }
+        }
+    }
+    
+    @MainActor
+    private func updateUI(with data: PointData) {
+        self.myPointView.configure(with: data)
     }
 }
 

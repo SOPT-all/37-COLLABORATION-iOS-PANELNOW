@@ -53,7 +53,6 @@ final class MyPointView: UIView {
     private let currentPointLabel = UILabel().then {
         $0.font = .title_bd_24
         $0.textColor = .gray06
-        $0.text = "4,500P" // TODO: API 바인딩
     }
     
     private let pointArrowImage = UIImageView().then {
@@ -149,6 +148,10 @@ final class MyPointView: UIView {
     @objc
     private func exchangeButtonDidTap() {
         delegate?.didTapExchangeButton()
+    }
+    
+    func configure(with data: PointData) {
+        self.currentPointLabel.text = "\(data.currentPoint.formattedWithComma)P"
     }
 }
 
