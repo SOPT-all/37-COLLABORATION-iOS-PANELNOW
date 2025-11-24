@@ -27,6 +27,7 @@ extension Config {
         guard let key = Config.infoDictionary[Keys.Plist.BASE_URL] as? String else {
             fatalError("BASE_URL is not set in plist for this configuration")
         }
-        return "https://" + key
+        
+        return "http://" + key
     }()
 }

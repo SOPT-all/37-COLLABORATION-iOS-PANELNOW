@@ -13,6 +13,7 @@ enum NetworkError: Error {
     case noData
     case unknownError
     case internalServerError
+    case clientError(statusCode: Int)
     
     var errorDescription: String {
         switch self {
@@ -26,6 +27,8 @@ enum NetworkError: Error {
             return "알 수 없는 에러"
         case .internalServerError:
             return "서버 에러"
+        case .clientError(let code):
+            return "클라이언트 요청 에러 (Code: \(code))"
         }
     }
 }

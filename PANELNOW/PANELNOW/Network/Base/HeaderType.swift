@@ -16,7 +16,7 @@ enum HeaderType {
         case .auth(let productId):
             [
                 "Content-Type": "application/json",
-                "product-id": "\(productId)" // TODO: \(productId)으로 수정
+                "product-id": "\(productId)"
             ]
         case .none:
             ["Content-Type": "application/json"]
