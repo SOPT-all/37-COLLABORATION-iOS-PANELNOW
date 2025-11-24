@@ -10,13 +10,24 @@ import UIKit
 import SnapKit
 import Then
 
+protocol ProductDetailViewDelegate: AnyObject {
+    func didTapBackButton()
+}
+
 class ProductDetailView: UIView {
+    
+    weak var delegate: ProductDetailViewDelegate?
+    
+    private let backButton = UIButton().then {
+        $0.setImage(.icBack, for: .normal)
+    }
     
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
         tableView.sectionHeaderTopPadding = 0
         tableView.bounces = false
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -36,6 +47,7 @@ class ProductDetailView: UIView {
         setStyle()
         setUI()
         setLayout()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -45,16 +57,23 @@ class ProductDetailView: UIView {
     private func setStyle() {
         backgroundColor = .white
         tableView.showsVerticalScrollIndicator = false
+        tableView.contentInsetAdjustmentBehavior = .never
     }
     
     private func setUI() {
         bottomContainerView.addSubview(bottomButton)
-        addSubviews(tableView, bottomContainerView)
+        addSubviews(backButton, tableView, bottomContainerView)
     }
     
     private func setLayout() {
+        backButton.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(58)
+            $0.leading.equalToSuperview().inset(12)
+            $0.size.equalTo(24)
+        }
+        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide)
+            $0.top.equalTo(backButton.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(bottomContainerView.snp.top)
         }
@@ -68,5 +87,14 @@ class ProductDetailView: UIView {
         bottomButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+    
+    private func setAddTarget() {
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func backButtonTapped() {
+        delegate?.didTapBackButton()
     }
 }

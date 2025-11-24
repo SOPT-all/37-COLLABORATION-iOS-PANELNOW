@@ -52,15 +52,17 @@ class CustomTabBarController: UIViewController {
     }
     
     private func showHome() {
-        // TODO: 이곳에 홈 뷰컨 추가
-//        let vc = HomeViewController()
-//        setContentView(vc)
+        let vc = HomeViewController()
+        vc.onExchangeButtonTap = { [weak self] in
+            self?.showExchangePoint()
+            self?.customTabBar.updateButtonStateToExchange()
+        }
+        setContentView(vc)
     }
     
     private func showExchangePoint() {
-        // TODO: 이곳에 교환 화면 추가
-//        let vc = ExchangeViewController()
-//        setContentView(vc)
+        let vc = ExchangeViewController()
+        setContentView(vc)
     }
     
     private func setContentView(_ vc: UIViewController) {
