@@ -11,6 +11,12 @@ import SnapKit
 final class ExchangeCollectionViewCell: UICollectionViewCell {
         
     // MARK: - UI Components
+
+    private let containerView: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        return view
+    }()
     
     private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -61,26 +67,37 @@ final class ExchangeCollectionViewCell: UICollectionViewCell {
     
     private func setUI() {
         contentView.addSubviews(
-            thumbnailImageView,
+            containerView,
             titleLabel,
             dayLabel,
             pointLabel
         )
+        containerView.addSubview(thumbnailImageView)
     }
     
     private func setStyle() {
         contentView.backgroundColor = .white
+        
+        containerView.backgroundColor = .gray04
+        containerView.layer.cornerRadius = 12
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.gray01.cgColor
+        containerView.layer.masksToBounds = true
     }
     
     private func setLayout() {
-        thumbnailImageView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(thumbnailImageView.snp.width).multipliedBy(116.0 / 160.0)
+            $0.height.equalTo(containerView.snp.width).multipliedBy(116.0 / 160.0)
+        }
+        
+        thumbnailImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(8)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(thumbnailImageView.snp.bottom).offset(16)
+            $0.top.equalTo(containerView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -98,7 +115,20 @@ final class ExchangeCollectionViewCell: UICollectionViewCell {
     // MARK: - Configure
     
     func configure(with item: ExchangeItemModel) {
-        thumbnailImageView.image = item.image
+        if let url = URL(string: item.imageUrl) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let self = self,
+                      let data = data,
+                      let image = UIImage(data: data) else { return }
+              
+                DispatchQueue.main.async {
+                    self.thumbnailImageView.image = image
+                }
+            }.resume()
+        } else {
+            thumbnailImageView.image = nil
+        }
+        
         titleLabel.text = item.title
         dayLabel.text = item.businessDayText
         pointLabel.text = item.pointText

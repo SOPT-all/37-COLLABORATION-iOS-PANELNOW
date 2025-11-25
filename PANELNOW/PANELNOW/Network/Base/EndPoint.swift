@@ -9,15 +9,21 @@ import Foundation
 
 enum EndPoint {
     case fetchHome // 뷰1
-    case fetchExchange // 뷰2
+    case fetchExchange(sort: String? = nil) // 뷰2
     case fetchProductDetail(Int) // 뷰3
     
     var url: String {
         switch self {
         case .fetchHome:
             return "/api/v1/users"
-        case .fetchExchange:
-            return "/api/v1/product"
+            
+        case .fetchExchange(let sort):
+            if let sort, !sort.isEmpty {
+                return "/api/v1/products?sort=\(sort)"
+            } else {
+                return "/api/v1/products"
+            }
+            
         case .fetchProductDetail(let productId):
             return "/api/v1/products/\(productId)"
         }

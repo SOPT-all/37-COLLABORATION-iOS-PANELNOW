@@ -26,6 +26,8 @@ final class ExchangeViewController: UIViewController {
     private let cellHeight: CGFloat = 214
     private let collectViewInset: UIEdgeInsets = .init(top: 0, left: 20, bottom: 0, right: 20)
     
+    private let exchangeService = ExchangeService.shared
+    
     private var pointInfo = PointInfo(current: 4500, exchanged: 4000)
     private var items: [ExchangeItemModel] = []
 
@@ -62,7 +64,8 @@ final class ExchangeViewController: UIViewController {
         setLayout()
         register()
         setDelegate()
-        loadMockData()
+        fetchProductData()
+        fetchPointData()
     }
 
     // MARK: - Setup
@@ -101,9 +104,47 @@ final class ExchangeViewController: UIViewController {
         collectionView.dataSource = self
     }
 
-    private func loadMockData() {
-        items = ExchangeItemModel.mockData
-        collectionView.reloadData()
+    private func fetchProductData() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let dtos = try await exchangeService.fetchProducts(sort: currentSort)
+                let models = dtos.map { ExchangeItemModel(dto: $0) }
+                self.updateUI(with: models)
+            } catch {
+                print("상품 전체조회 실패: \(error)")
+            }
+        }
+    }
+
+    @MainActor
+    private func updateUI(with models: [ExchangeItemModel]) {
+        self.items = models
+        
+        let itemsSection = ExchangeSection.items.rawValue
+        collectionView.reloadSections(IndexSet(integer: itemsSection))
+    }
+
+    private func fetchPointData() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let pointData = try await HomeService.shared.fetchHome()
+                self.updatePointUI(with: pointData)
+            } catch {
+                print("유저 포인트 불러오기 실패: \(error)")
+            }
+        }
+    }
+
+    @MainActor
+    private func updatePointUI(with data: PointData) {
+        self.pointInfo = PointInfo(dto: data)
+    
+        let pointSection = ExchangeSection.point.rawValue
+        collectionView.reloadSections(IndexSet(integer: pointSection))
     }
 }
 
@@ -299,10 +340,11 @@ extension ExchangeViewController: SortCellDelegate {
 
     private func applySort(_ option: SortOption) {
         currentSort = option
-        // TODO: 정렬 로직 추가
+        
+        fetchProductData()
+        
         let sortSection = ExchangeSection.sort.rawValue
-        let itemsSection = ExchangeSection.items.rawValue
-        collectionView.reloadSections(IndexSet([sortSection, itemsSection]))
+        collectionView.reloadSections(IndexSet(integer: sortSection))
     }
 }
 
@@ -331,3 +373,4 @@ extension ExchangeViewController: UICollectionViewDelegate {
 #Preview {
     ExchangeViewController()
 }
+    
