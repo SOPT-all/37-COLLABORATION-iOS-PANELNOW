@@ -7,21 +7,12 @@
 
 import Foundation
 
-protocol ExchangeServiceProtocol {
-    func fetchProducts(sort: SortOption?) async throws -> [ProductDTO]
-}
-
-final class ExchangeService: ExchangeServiceProtocol {
-
+final class ExchangeService {
     static let shared = ExchangeService()
-    private init() { }
-
+    private init() {}
+    
     func fetchProducts(sort: SortOption? = nil) async throws -> [ProductDTO] {
         let sortQuery = sort?.apiValue
-        
-        let products: [ProductDTO] = try await BaseService.shared.request(
-            endPoint: .fetchExchange(sort: sortQuery)
-        )
-        return products
+        return try await BaseService.shared.request(endPoint: .fetchExchange(sort: sortQuery))
     }
 }
