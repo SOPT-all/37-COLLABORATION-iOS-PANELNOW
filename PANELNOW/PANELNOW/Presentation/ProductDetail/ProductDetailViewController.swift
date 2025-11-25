@@ -19,7 +19,6 @@ enum CellSection: Int, CaseIterable {
 
 class ProductDetailViewController: UIViewController {
     
-   // TODO: 데이터 바인딩
     var productId = 1
     var buttonState: State = .notPossible(lackingPoint: 0)
     
