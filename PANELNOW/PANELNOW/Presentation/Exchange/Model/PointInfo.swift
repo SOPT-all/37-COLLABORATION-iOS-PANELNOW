@@ -6,6 +6,13 @@
 //
 
 struct PointInfo {
-    var current: Int
-    var exchanged: Int
+    let current: Int
+    let exchanged: Int
+}
+
+extension PointInfo {
+    init(dto: PointData) {
+        self.current = dto.currentPoint
+        self.exchanged = dto.usedPoint
+    }
 }
