@@ -11,22 +11,12 @@ typealias ProductDetailResponse = BaseResponse<ProductDetailDTO>
 
 struct ProductDetailDTO: Codable {
     let id: Int
-    let imageURL: String
+    let imageUrl: String
     let name: String
     let price: Int
     let phoneNumber: String
     let exchangeDay: String
     let infoSections: [InfoSectionDTO]
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case imageURL = "imageUrl"
-        case name
-        case price
-        case phoneNumber
-        case exchangeDay
-        case infoSections
-    }
 }
 
 struct InfoSectionDTO: Codable {

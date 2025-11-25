@@ -32,7 +32,7 @@ class ItemImageCell: BaseUITableViewCell {
     }
     
     func configure(with data: ProductDetailDTO) {
-        guard let url = URL(string: data.imageURL) else { return }
+        guard let url = URL(string: data.imageUrl) else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
             guard let self,

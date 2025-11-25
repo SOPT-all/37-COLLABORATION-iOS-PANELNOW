@@ -26,7 +26,7 @@ class ItemNameAndPointCell: BaseUITableViewCell {
     }
     
     private let point = UILabel().then {
-        $0.text = "5,000원 P"
+        $0.text = "5,000P"
         $0.font = .title_bd_24
         $0.textColor = .mainBlue
     }
