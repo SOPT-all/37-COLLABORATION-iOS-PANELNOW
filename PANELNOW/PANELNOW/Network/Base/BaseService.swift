@@ -36,8 +36,14 @@ final class BaseService {
         NetworkLogger.shared.responseLog(httpResponse, data: data)
         
         // 상태 코드 체크
-        guard (200...299).contains(httpResponse.statusCode) else {
+        let statusCode = httpResponse.statusCode
+        
+        if (400...499).contains(statusCode) {
+            throw NetworkError.clientError(statusCode: statusCode)
+        } else if (500...599).contains(statusCode) {
             throw NetworkError.internalServerError
+        } else if !(200...299).contains(statusCode) {
+            throw NetworkError.unknownError
         }
         
         // 디코딩
