@@ -26,7 +26,7 @@ class ItemNameAndPointCell: BaseUITableViewCell {
     }
     
     private let point = UILabel().then {
-        $0.text = "5,000원"
+        $0.text = "5,000원 P"
         $0.font = .title_bd_24
         $0.textColor = .mainBlue
     }
@@ -127,5 +127,13 @@ class ItemNameAndPointCell: BaseUITableViewCell {
         
         let prefix = digits.prefix(digits.count - 6)
         return prefix + "******"
+    }
+    
+    func configure(with data: ProductDetailDTO) {
+        self.itemNameLabel.text = data.name
+        self.point.text = "\(data.price) P"
+        self.phoneNumberLabel.text = maskPhoneNumber(data.phoneNumber)
+        self.dateLabel.text = data.exchangeDay
+        
     }
 }

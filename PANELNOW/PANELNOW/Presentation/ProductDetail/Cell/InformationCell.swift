@@ -82,4 +82,17 @@ class InformationCell: BaseUITableViewCell {
             $0.bottom.equalTo(contentView).inset(43)
         }
     }
+    
+    func configure(with data: ProductDetailDTO) {
+        let sections = data.infoSections
+        
+        firstTitleLabel.text = "▶"+sections[0].label
+        firstContentLabel.text = sections[0].content
+        
+        secondTitleLabel.text = "▶"+sections[1].label
+        secondContentLabel.text = sections[1].content
+        
+        thirdTitleLabel.text = "▶"+sections[2].label
+        thirdContentLabel.text = sections[2].content
+    }
 }
