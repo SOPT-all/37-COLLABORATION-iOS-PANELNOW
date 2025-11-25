@@ -15,4 +15,8 @@ final class ProductDetailService {
     func fetchProductDetail(productId: Int) async throws -> ProductDetailDTO {
         return try await BaseService.shared.request(endPoint: .fetchProductDetail(productId))
     }
+    
+    func exchangeProduct(productId: Int) async throws -> BaseResponse<EmptyResponse> {
+        return try await BaseService.shared.requestWithoutData(endPoint: .exchangeProduct(productId))
+       }
 }

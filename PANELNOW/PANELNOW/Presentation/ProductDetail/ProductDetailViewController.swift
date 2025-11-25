@@ -20,7 +20,9 @@ enum CellSection: Int, CaseIterable {
 class ProductDetailViewController: UIViewController {
     
    // TODO: 데이터 바인딩
-    private let productId = 1
+    var productId = 1
+    var buttonState: State = .notPossible(lackingPoint: 0)
+    
     private let mainTableView = ProductDetailView()
     private var productDetail: ProductDetailDTO?
 
@@ -39,6 +41,7 @@ class ProductDetailViewController: UIViewController {
     
     private func setStyle() {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        mainTableView.bottomButton.configure(state: buttonState)
     }
     
     private func register() {
@@ -52,6 +55,7 @@ class ProductDetailViewController: UIViewController {
         mainTableView.tableView.delegate = self
         mainTableView.tableView.dataSource = self
         mainTableView.delegate = self
+        mainTableView.bottomButton.delegate = self
     }
     
     private func fetchData() {
@@ -65,6 +69,35 @@ class ProductDetailViewController: UIViewController {
                 print("개별 상품 불러오기 실패: \(error)")
             }
         }
+    }
+    
+    private func exchangePoint() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let response = try await ProductDetailService.shared.exchangeProduct(productId: productId)
+                
+                await MainActor.run {
+                    self.showAlert(title: "교환 완료", message: response.message) {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.showAlert(title: "오류", message: "교환에 실패했어요. 잠시 후 다시 시도해주세요.")
+                    print("교환 API 실패: \(error)")
+                }
+            }
+        }
+    }
+    
+    private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            completion?()
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
     @MainActor
@@ -150,5 +183,11 @@ extension ProductDetailViewController: UITableViewDataSource {
 extension ProductDetailViewController: ProductDetailViewDelegate {
     func didTapBackButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+}
+
+extension ProductDetailViewController: BottomButtonViewDelegate {
+    func didTapExchangeButton() {
+        exchangePoint()
     }
 }

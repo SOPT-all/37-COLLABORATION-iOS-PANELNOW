@@ -39,7 +39,7 @@ class ProductDetailView: UIView {
         $0.layer.shadowRadius = 6
     }
     
-    private let bottomButton = BottomButtonView()
+    var bottomButton = BottomButtonView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

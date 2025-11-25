@@ -11,11 +11,17 @@ import SnapKit
 import Then
 
 enum State {
-    case possible
-    case notPossible
+    case possible(currentPoint: Int)
+    case notPossible(lackingPoint: Int)
+}
+
+protocol BottomButtonViewDelegate: AnyObject {
+    func didTapExchangeButton()
 }
 
 final class BottomButtonView: UIView {
+    
+    weak var delegate: BottomButtonViewDelegate?
     
     private let notPossibleButton = UIButton().then {
         $0.setTitle("500 포인트가 부족해요", for: .disabled)
@@ -73,9 +79,9 @@ final class BottomButtonView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setState(.notPossible)
         setUI()
         setLayout()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -110,14 +116,25 @@ final class BottomButtonView: UIView {
         }
     }
     
-    func setState(_ state: State) {
+    func setAddTarget() {
+        possibleButton.addTarget(self, action: #selector(didTapPossibleButton), for: .touchUpInside)
+    }
+    
+    @objc
+    func didTapPossibleButton() {
+        delegate?.didTapExchangeButton()
+    }
+    
+    func configure(state: State) {
         switch state {
-        case .notPossible:
-            notPossibleButton.isHidden = false
-            possibleStackView.isHidden = true
-        case .possible:
+        case .possible(let currentPoint):
             notPossibleButton.isHidden = true
             possibleStackView.isHidden = false
+            point.text = "\(currentPoint)P"
+        case .notPossible(let lackingPoint):
+            notPossibleButton.isHidden = false
+            possibleStackView.isHidden = true
+            notPossibleButton.setTitle("\(lackingPoint) 포인트가 부족해요", for: .disabled)
         }
     }
 }
