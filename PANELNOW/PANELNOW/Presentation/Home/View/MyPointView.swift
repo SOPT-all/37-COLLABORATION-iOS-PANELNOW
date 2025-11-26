@@ -53,7 +53,7 @@ final class MyPointView: UIView {
     private let currentPointLabel = UILabel().then {
         $0.font = .title_bd_24
         $0.textColor = .gray06
-        $0.text = "0P"
+        $0.alpha = 0
     }
     
     private let pointArrowImage = UIImageView().then {
@@ -153,6 +153,9 @@ final class MyPointView: UIView {
     
     func configure(with data: PointData) {
         self.currentPointLabel.text = "\(data.currentPoint.formattedWithComma)P"
+        UIView.animate(withDuration: 0.3) {
+            self.currentPointLabel.alpha = 1
+        }
     }
 }
 
