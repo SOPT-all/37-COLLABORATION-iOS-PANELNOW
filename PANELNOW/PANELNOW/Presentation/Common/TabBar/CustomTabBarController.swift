@@ -12,6 +12,8 @@ import Then
 
 class CustomTabBarController: UIViewController {
     
+    private var sharedPointData: PointData?
+    
     private let customTabBar = CustomTabBarView()
     private let contentContainerView = UIView()
     
@@ -47,21 +49,26 @@ class CustomTabBarController: UIViewController {
         }
         
         customTabBar.exchangePointButtonTapHandler = { [weak self] in
-            self?.showExchangePoint()
+            self?.showExchangePoint(data: self?.sharedPointData)
         }
     }
     
     private func showHome() {
         let vc = HomeViewController()
-        vc.onExchangeButtonTap = { [weak self] in
-            self?.showExchangePoint()
+        
+        vc.onDataFetched = { [weak self] data in
+            self?.sharedPointData = data
+        }
+        
+        vc.onExchangeButtonTap = { [weak self] pointData in
+            self?.showExchangePoint(data: pointData)
             self?.customTabBar.updateButtonStateToExchange()
         }
         setContentView(vc)
     }
     
-    private func showExchangePoint() {
-        let vc = ExchangeViewController()
+    private func showExchangePoint(data: PointData? = nil) {
+        let vc = ExchangeViewController(initialPointData: data)
         setContentView(vc)
     }
     
