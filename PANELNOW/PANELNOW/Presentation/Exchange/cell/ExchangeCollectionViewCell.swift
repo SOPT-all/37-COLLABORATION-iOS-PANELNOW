@@ -93,7 +93,7 @@ final class ExchangeCollectionViewCell: UICollectionViewCell {
         }
         
         thumbnailImageView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(8)
+            $0.edges.equalToSuperview().inset(16)
         }
         
         titleLabel.snp.makeConstraints {
