@@ -53,6 +53,7 @@ final class MyPointView: UIView {
     private let currentPointLabel = UILabel().then {
         $0.font = .title_bd_24
         $0.textColor = .gray06
+        $0.text = "0P"
     }
     
     private let pointArrowImage = UIImageView().then {
