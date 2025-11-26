@@ -14,7 +14,9 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Properties
     
-    var onExchangeButtonTap: (() -> Void)?
+    var onExchangeButtonTap: ((PointData?) -> Void)?
+    var onDataFetched: ((PointData) -> Void)?
+    private var cachedPointData: PointData?
     
     // MARK: - UI Components
     
@@ -110,13 +112,15 @@ final class HomeViewController: UIViewController {
     
     @MainActor
     private func updateUI(with data: PointData) {
+        self.cachedPointData = data
         self.myPointView.configure(with: data)
+        onDataFetched?(data)
     }
 }
 
 extension HomeViewController: MyPointViewDelegate {
     func didTapExchangeButton() {
-        onExchangeButtonTap?()
+        onExchangeButtonTap?(self.cachedPointData)
     }
 }
 

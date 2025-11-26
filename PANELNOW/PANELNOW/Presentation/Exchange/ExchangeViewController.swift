@@ -28,7 +28,7 @@ final class ExchangeViewController: UIViewController {
     
     private let exchangeService = ExchangeService.shared
     
-    private var pointInfo = PointInfo(current: 4500, exchanged: 4000)
+    private var pointInfo: PointInfo?
     private var items: [ExchangeItemModel] = []
 
     private var currentSort: SortOption = .popular
@@ -53,8 +53,18 @@ final class ExchangeViewController: UIViewController {
         
         return collectionView
     }()
-
+    
     // MARK: - Lifecycle
+    init(initialPointData: PointData? = nil) {
+        if let data = initialPointData {
+            self.pointInfo = PointInfo(dto: data)
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +74,8 @@ final class ExchangeViewController: UIViewController {
         setLayout()
         register()
         setDelegate()
+        updatePointData()
         fetchProductData()
-        fetchPointData()
     }
 
     // MARK: - Setup
@@ -102,6 +112,15 @@ final class ExchangeViewController: UIViewController {
     private func setDelegate() {
         collectionView.delegate = self
         collectionView.dataSource = self
+    }
+    
+    private func updatePointData() {
+        if pointInfo != nil {
+            let pointSection = ExchangeSection.point.rawValue
+            collectionView.reloadSections(IndexSet(integer: pointSection))
+        } else {
+            fetchPointData()
+        }
     }
 
     private func fetchProductData() {
@@ -195,7 +214,12 @@ extension ExchangeViewController: UICollectionViewDataSource {
             ) as? PointCell else {
                 return UICollectionViewCell()
             }
-            cell.configure(point: pointInfo.current, exchangedPoint: pointInfo.exchanged)
+            
+            if let info = pointInfo {
+                cell.configure(point: info.current, exchangedPoint: info.exchanged)
+            } else {
+                cell.configure(point: 0, exchangedPoint: 0)
+            }
             return cell
 
         case .sort:
@@ -357,10 +381,13 @@ extension ExchangeViewController: UICollectionViewDelegate {
         
         switch sectionType {
         case .items:
+            guard let info = pointInfo else {
+                return
+            }
             let detailVC = ProductDetailViewController()
             
             let item = items[indexPath.row]
-            let currentPoint = pointInfo.current
+            let currentPoint = info.current
             let lackingPoint = item.point - currentPoint
             
             detailVC.productId = item.id
