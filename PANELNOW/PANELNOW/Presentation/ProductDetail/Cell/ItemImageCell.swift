@@ -27,7 +27,7 @@ class ItemImageCell: BaseUITableViewCell {
     
     override func setLayout() {
         itemImage.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().inset(12)
         }
     }
     
