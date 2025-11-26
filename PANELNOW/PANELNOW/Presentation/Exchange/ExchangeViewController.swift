@@ -77,6 +77,12 @@ final class ExchangeViewController: UIViewController {
         updatePointData()
         fetchProductData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetchPointData()
+    }
 
     // MARK: - Setup
 
@@ -115,12 +121,10 @@ final class ExchangeViewController: UIViewController {
     }
     
     private func updatePointData() {
-        if pointInfo != nil {
-            let pointSection = ExchangeSection.point.rawValue
-            collectionView.reloadSections(IndexSet(integer: pointSection))
-        } else {
-            fetchPointData()
-        }
+        guard pointInfo != nil else { return }
+        
+        let pointSection = ExchangeSection.point.rawValue
+        collectionView.reloadSections(IndexSet(integer: pointSection))
     }
 
     private func fetchProductData() {
@@ -408,4 +412,3 @@ extension ExchangeViewController: UICollectionViewDelegate {
 #Preview {
     ExchangeViewController()
 }
-    
