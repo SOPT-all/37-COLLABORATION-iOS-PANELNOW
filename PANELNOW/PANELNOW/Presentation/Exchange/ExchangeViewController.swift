@@ -359,8 +359,16 @@ extension ExchangeViewController: UICollectionViewDelegate {
         case .items:
             let detailVC = ProductDetailViewController()
             
-            // TODO: 데이터전달
+            let item = items[indexPath.row]
+            let currentPoint = pointInfo.current
+            let lackingPoint = item.point - currentPoint
             
+            detailVC.productId = item.id
+            if lackingPoint > 0 {
+                detailVC.buttonState = .notPossible(lackingPoint: lackingPoint)
+            } else {
+                detailVC.buttonState = .possible(currentPoint: currentPoint)
+            }
             detailVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(detailVC, animated: true)
             

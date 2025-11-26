@@ -60,3 +60,37 @@ final class BaseService {
         }
     }
 }
+
+extension BaseService {
+    func requestWithoutData(endPoint: EndPoint) async throws -> BaseResponse<EmptyResponse> {
+        let urlString = Config.baseURL + endPoint.url
+        guard let url = URL(string: urlString) else { throw NetworkError.invalidURL }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        endPoint.header.forEach { key, value in
+            request.addValue(value, forHTTPHeaderField: key)
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.unknownError
+        }
+        
+        NetworkLogger.shared.responseLog(httpResponse, data: data)
+        
+        // 상태 코드 체크
+        let statusCode = httpResponse.statusCode
+        
+        if (400...499).contains(statusCode) {
+            throw NetworkError.clientError(statusCode: statusCode)
+        } else if (500...599).contains(statusCode) {
+            throw NetworkError.internalServerError
+        } else if !(200...299).contains(statusCode) {
+            throw NetworkError.unknownError
+        }
+        
+        let decoded = try JSONDecoder().decode(BaseResponse<EmptyResponse>.self, from:  data)
+        return decoded
+    }
+}

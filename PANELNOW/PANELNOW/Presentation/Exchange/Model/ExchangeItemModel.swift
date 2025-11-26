@@ -8,6 +8,7 @@
 import UIKit
 
 struct ExchangeItemModel {
+    let id: Int
     let imageUrl: String
     let title: String
     let businessDayText: String
@@ -24,7 +25,8 @@ struct ExchangeItemModel {
         return "\(pointString)P"
     }
 
-    init(imageUrl: String, title: String, businessDayText: String, point: Int) {
+    init(id: Int, imageUrl: String, title: String, businessDayText: String, point: Int) {
+        self.id = id
         self.imageUrl = imageUrl
         self.title = title
         self.businessDayText = businessDayText
@@ -34,6 +36,7 @@ struct ExchangeItemModel {
 
 extension ExchangeItemModel {
     init(dto: ProductDTO) {
+        self.id = dto.id
         self.imageUrl = dto.imageUrl
         self.title = dto.name
         self.businessDayText = dto.day

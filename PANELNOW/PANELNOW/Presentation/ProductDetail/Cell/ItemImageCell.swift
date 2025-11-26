@@ -13,7 +13,6 @@ import Then
 class ItemImageCell: BaseUITableViewCell {
     
     private let itemImage = UIImageView().then {
-        $0.image = .exchangeBigImg1
         $0.contentMode = .scaleAspectFit
     }
     
@@ -28,7 +27,21 @@ class ItemImageCell: BaseUITableViewCell {
     
     override func setLayout() {
         itemImage.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
+    }
+    
+    func configure(with data: ProductDetailDTO) {
+        guard let url = URL(string: data.imageUrl) else { return }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let self,
+                  let data,
+                  let image = UIImage(data: data) else { return }
+            
+            DispatchQueue.main.async {
+                self.itemImage.image = image
+            }
+        }.resume()
     }
 }

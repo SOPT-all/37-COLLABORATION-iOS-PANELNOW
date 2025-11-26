@@ -18,23 +18,29 @@ enum CellSection: Int, CaseIterable {
 }
 
 class ProductDetailViewController: UIViewController {
-
-    private let mainTableView = ProductDetailView()
     
+    var productId = 1
+    var buttonState: State = .notPossible(lackingPoint: 0)
+    
+    private let mainTableView = ProductDetailView()
+    private var productDetail: ProductDetailDTO?
+
     override func loadView() {
         self.view = mainTableView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setStyle()
         register()
         setDelegate()
+        fetchData()
     }
     
     private func setStyle() {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        mainTableView.bottomButton.configure(state: buttonState)
     }
     
     private func register() {
@@ -43,11 +49,60 @@ class ProductDetailViewController: UIViewController {
         mainTableView.tableView.register(ItemDetailCell.self, forCellReuseIdentifier: ItemDetailCell.identifier)
         mainTableView.tableView.register(InformationCell.self, forCellReuseIdentifier: InformationCell.identifier)
     }
-
+    
     private func setDelegate() {
         mainTableView.tableView.delegate = self
         mainTableView.tableView.dataSource = self
         mainTableView.delegate = self
+        mainTableView.bottomButton.delegate = self
+    }
+    
+    private func fetchData() {
+        Task { [weak self] in
+            guard let self = self else { return}
+            
+            do {
+                let ProductDetailData = try await ProductDetailService.shared.fetchProductDetail(productId: productId)
+                self.updateUI(with: ProductDetailData)
+            } catch {
+                print("개별 상품 불러오기 실패: \(error)")
+            }
+        }
+    }
+    
+    private func exchangePoint() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let response = try await ProductDetailService.shared.exchangeProduct(productId: productId)
+                
+                await MainActor.run {
+                    self.showAlert(title: "교환 완료", message: response.message) {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.showAlert(title: "오류", message: "교환에 실패했어요. 잠시 후 다시 시도해주세요.")
+                    print("교환 API 실패: \(error)")
+                }
+            }
+        }
+    }
+    
+    private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            completion?()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @MainActor
+    private func updateUI(with data: ProductDetailDTO) {
+        self.productDetail = data
+        self.mainTableView.tableView.reloadData()
     }
 }
 
@@ -96,7 +151,7 @@ extension ProductDetailViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        return productDetail != nil ? 1 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -104,15 +159,21 @@ extension ProductDetailViewController: UITableViewDataSource {
         switch section {
         case .itemImage:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ItemImageCell.identifier, for: indexPath) as? ItemImageCell else { return UITableViewCell() }
+            guard let productDetail else { return UITableViewCell() }
+            cell.configure(with: productDetail)
             return cell
         case .itemNameAndPoint:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ItemNameAndPointCell.identifier, for: indexPath) as? ItemNameAndPointCell else { return UITableViewCell() }
+            guard let productDetail else { return UITableViewCell() }
+            cell.configure(with: productDetail)
             return cell
         case .itemDetail:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ItemDetailCell.identifier, for: indexPath) as? ItemDetailCell else { return UITableViewCell() }
             return cell
         case .information:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: InformationCell.identifier, for: indexPath) as? InformationCell else { return UITableViewCell() }
+            guard let productDetail else { return UITableViewCell() }
+            cell.configure(with: productDetail)
             return cell
         }
     }
@@ -121,5 +182,11 @@ extension ProductDetailViewController: UITableViewDataSource {
 extension ProductDetailViewController: ProductDetailViewDelegate {
     func didTapBackButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+}
+
+extension ProductDetailViewController: BottomButtonViewDelegate {
+    func didTapExchangeButton() {
+        exchangePoint()
     }
 }
