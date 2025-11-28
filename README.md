@@ -17,7 +17,7 @@
 ## 👩🏻‍💻 Developers
 | [신혜연](https://github.com/hyeyeonie) | [박정환](https://github.com/Jhw9n) | [홍준범](https://github.com/KuKaH) |
 | :--------: | :--------: | :--------: |
-| <img src="https://github.com/hyeyeonie.png" width="200" alt="멜론 앱 UI 스크린샷 1"> | <img src="https://github.com/Jhw9n.png" width="200" alt="멜론 앱 UI 스크린샷 1"> | <img src="https://github.com/KuKaH.png" width="200" alt="멜론 앱 UI 스크린샷 1"> |
+| <img src="https://github.com/hyeyeonie.png" width="200"> | <img src="https://github.com/Jhw9n.png" width="200"> | <img src="https://github.com/KuKaH.png" width="200"> |
 | <p align = "center">`Home View` | <p align = "center"> `Exchange View` | <p align = "center">`ProductDetail View` |
 
 <br>
@@ -71,7 +71,7 @@
 
 </br>
 
-## 🎬 시연 영상
+## 🎬 Demo Video
 
 https://github.com/user-attachments/assets/1a9e4e6b-d790-45f2-9b85-cd3e02b8309c
 
